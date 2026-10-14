@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For My Love ♡</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Georgia,serif;color:#fff8f8;background:#24191e}
+.bg{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:-2}
+.shade{position:fixed;inset:0;background:rgba(22,12,17,.62);z-index:-1}
+.wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px 12px}
+.card{width:min(100%,600px);padding:clamp(20px,5vw,38px);background:rgba(39,20,29,.67);border:1px solid #ffffff55;border-radius:24px;backdrop-filter:blur(10px);box-shadow:0 15px 55px #0004}
+.hearts{text-align:center;color:#ffd1df;letter-spacing:7px;font-size:25px}
+h1{text-align:center;font-size:clamp(30px,7vw,45px);font-weight:normal;margin:10px 0}
+.intro{text-align:center;line-height:1.6;color:#ffe9ef}
+label{display:block;line-height:1.5}
+input[type=text],input[type=password]{width:100%;padding:13px;margin:8px 0 18px;border:1px solid #ffffff66;border-radius:12px;background:#ffffff18;color:white;font-size:16px}
+input::placeholder{color:#eedbe1}
+.q{padding:17px 0;border-top:1px solid #ffffff35}
+.q h3{font-size:18px;font-weight:normal;margin:0 0 12px}
+.option{display:flex;align-items:flex-start;gap:10px;padding:11px;border:1px solid #ffffff45;border-radius:12px;margin:8px 0;background:#ffffff0c;cursor:pointer}
+.option:has(input:checked){border-color:#ffd1df;background:#ffd1df22}
+.option input{margin-top:4px;accent-color:#ffd1df}
+button{width:100%;padding:14px;border:0;border-radius:13px;background:#ffdce5;color:#44202c;font-weight:bold;font-size:15px;cursor:pointer;margin-top:10px}
+button:disabled{opacity:.6}.msg{text-align:center;line-height:1.5;min-height:20px}.small{text-align:center;font-size:12px;color:#ffe6ee;margin-top:18px}
+a{color:#ffe3ed}.hidden{display:none!important}
+@media(max-width:480px){.wrap{padding:12px}.card{padding:22px 17px}.q h3{font-size:17px}}
+</style>
+</head>
+<body>
+<img class="bg" src="background.jpeg" alt="">
+<div class="shade"></div>
+<main class="wrap">
+<section class="card">
+<div class="hearts">♡ ♥ ♡</div>
+<h1>Hey, my love 💌</h1>
+<p class="intro">I have a few little questions for you. Answer them honestly, okay? 🥹</p>
+<form id="loveForm">
+<label for="hisName">Your name (optional)</label>
+<input type="text" id="hisName" maxlength="60" placeholder="Type your name…">
+<div id="questions"></div>
+<p class="msg" id="msg" aria-live="polite"></p>
+<button type="submit" id="submitBtn">Submit my answers ♡</button>
+</form>
+<p class="small">made with love ♡</p>
+</section>
+</main>
+<script>
+/* Questions for Subin */
+const questions = [
+ {text:"Ninakku ee relationship munnot kond pokan thalparyam undo? ❤️", type:"choice", options:["Yes ❤️","No 💔"]},
+ {text:"Ethra naal venelum ennod mindaathe irikkan ninakku ok aano? 🥺", type:"choice", options:["Yes 💔","No ❤️"]},
+ {text:"Ithrayum varshamaayitt ente sneham nee value cheyyathath kondaan njan ingane mindaathe irunnath enn manassilaayo? 💔", type:"text", placeholder:"Ninte manassilullath ivide parayu…"},
+ {text:"Njan snehikkunnathinekkal vere aalukal ninte life-il ullathupole nee kaanikkumbol, njan engane react aakanam? 🥺", type:"text", placeholder:"Ninte answer ivide type cheyyu…"},
+ {text:"Iniyumulla days ingane thanne pokanam ennano nee aagrahikkunnath? 💔", type:"choice", options:["Yes 💔","No ❤️"]},
+ {text:"Ith fix cheyyan ninakku aagraham undo? ❤️", type:"choice", options:["Yes ❤️","No 💔"]},
+ {text:"Njan illaatheyum ninakku life happy aayirikkan okumo? 🥺💔", type:"choice", options:["Yes 💔","No ❤️","Maybe 🥹"]},
+ {text:"Ee relationship end cheyyanam enn aagraham undenkil, ennod thurannu parayumo? 💔", type:"text", placeholder:"Ennod thurannu parayu…"},
+ {text:"Ee relationship-il njan ninne snehikkunnillennum enikku ego, ahankaaram maathram aanennum ninakku thonnunnundo? 💔", type:"choice", options:["Yes 💔","No ❤️"]},
+ {text:"Ennoda parayan enthenkilum undenkil ivide type cheyth submit cheyyam. ❤️🫂", type:"text", placeholder:"Ennod parayanullath ellam ivide thurannu parayoo… Njan kelkkan ready aanu. ❤️"}
+];
+const qBox=document.getElementById("questions");
+questions.forEach((q,i)=>{
+ const section=document.createElement("section");section.className="q";
+ const title=document.createElement("h3");title.textContent=`${i+1}. ${q.text}`;section.appendChild(title);
+ if(q.type==="text"){
+  const area=document.createElement("textarea");area.name="q"+i;area.rows=4;area.maxLength=3000;area.placeholder=q.placeholder||"Type your answer here…";area.required=true;
+  area.style.cssText="width:100%;padding:13px;border:1px solid #ffffff66;border-radius:12px;background:#ffffff18;color:white;font:16px Arial,sans-serif;resize:vertical;line-height:1.5";
+  section.appendChild(area);
+ } else {
+  q.options.forEach((opt,j)=>{
+   const label=document.createElement("label");label.className="option";
+   const radio=document.createElement("input");radio.type="radio";radio.name="q"+i;radio.value=opt;radio.required=j===0;
+   const span=document.createElement("span");span.textContent=opt;label.append(radio,span);section.appendChild(label);
+  });
+ }
+ qBox.appendChild(section);
+});
+const API_BASE = "https://YOUR-BACKEND-URL.onrender.com"; // Replace after deploying backend
+ document.getElementById("loveForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const btn=document.getElementById("submitBtn"), msg=document.getElementById("msg");
+ const answers=questions.map((q,i)=>({question:q.text,answer:q.type==="text"?document.querySelector(`[name="q${i}"]`)?.value.trim():document.querySelector(`input[name="q${i}"]:checked`)?.value}));
+ if(answers.some(a=>!a.answer)){msg.textContent="Please answer every question first ♡";return}
+ btn.disabled=true;msg.textContent="Sending your answers… ♡";
+ try{
+  const response=await fetch(`${API_BASE}/api/submissions`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:document.getElementById("hisName").value.trim(),answers})});
+  const data=await response.json();if(!response.ok)throw new Error(data.error||"Could not submit");
+  document.getElementById("loveForm").innerHTML='<div class="hearts">♡ ♥ ♡</div><h2 class="intro">Thank you, my love! 🥹💗</h2><p class="intro">Your answers have been sent privately. ❤️</p>';
+ }catch(err){msg.textContent="Submission failed. Please try again in a moment. ♡";btn.disabled=false;console.error(err)}
+});
+</script>
+</body>
+</html>
